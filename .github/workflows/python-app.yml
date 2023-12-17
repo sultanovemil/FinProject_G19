@@ -39,7 +39,7 @@ jobs:
       env:
         API_TOKEN: ${{ secrets.API_TOKEN }}
       run: |
-        echo "API_TOKEN=${API_TOKEN}" >> $GITHUB_ENV
+        echo "API_TOKEN=\"${API_TOKEN}\"" >> $GITHUB_ENV
     - name: Test with pytest
       env:
         API_TOKEN: ${{ secrets.API_TOKEN }}
