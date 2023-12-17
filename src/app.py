@@ -14,7 +14,7 @@ API_URL_TRA = "https://api-inference.huggingface.co/models/Helsinki-NLP/opus-mt-
 API_URL_KEY = "https://api-inference.huggingface.co/models/ml6team/keyphrase-extraction-kbir-inspec"
 API_URL_SUM = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
 
-headers = {"Authorization": os.getenv("API_TOKEN")}
+headers = {"Authorization": os.getenv('API_TOKEN')}
 
 
 # Функция для получения ключевых слов
@@ -22,7 +22,11 @@ def get_key_words(payload):
     response = requests.post(API_URL_KEY, headers=headers, json=payload)
     body = response.json()
     if 'error' in body:
-        time.sleep(body['estimated_time'])
+        if 'estimated_time' in body:
+            time.sleep(body['estimated_time'])
+        else:
+            print(body)
+            return
         get_key_words(payload)
     return body
 
@@ -31,7 +35,11 @@ def translate_key_words(payload):
     response = requests.post(API_URL_TRA, headers=headers, json=payload)
     body = response.json()
     if 'error' in body:
-        time.sleep(body['estimated_time'])
+        if 'estimated_time' in body:
+            time.sleep(body['estimated_time'])
+        else:
+            print(body)
+            return
         translate_key_words(payload)
     return body
 
@@ -40,7 +48,11 @@ def make_summary(payload):
     response = requests.post(API_URL_SUM, headers=headers, json=payload)
     body = response.json()
     if 'error' in body:
-        time.sleep(body['estimated_time'])
+        if 'estimated_time' in body:
+            time.sleep(body['estimated_time'])
+        else:
+            print(body)
+            return
         make_summary(payload)
     return body
 
