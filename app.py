@@ -11,7 +11,7 @@ API_URL_tra = "https://api-inference.huggingface.co/models/Helsinki-NLP/opus-mt-
 API_URL_key = "https://api-inference.huggingface.co/models/ml6team/keyphrase-extraction-kbir-inspec"
 API_URL_sum = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
 
-headers = {"Authorization": os.getenv("api_token")}
+headers = {"Authorization": os.getenv("API_TOKEN")}
 
 
 # Функция для получения ключевых слов
