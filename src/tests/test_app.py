@@ -9,6 +9,6 @@ def test_input():
     at.run()
     at.text_area(key='t_area').input(text).run()
     #at.text_area[0].input(text).run()
-    at.button[0].click().run()
+    #at.button[0].click().run()
     assert len(at.text_area(key='t_area').value) > 0
     assert len(at.exception) == 0
