@@ -88,7 +88,7 @@ if button_start:
     with st.spinner('Составляем конспект...'):
         # Составляем конспект
         summary_text = make_summary({"inputs": text_from_tarea})
-        col2.text_area('Конспект статьи', height=500, value=summary_text[0]['summary_text'])
+        col2.text_area('Конспект статьи', height=500, key='sum_area', value=summary_text[0]['summary_text'])
 
     with st.spinner('Получаем ключевые слова...'):
         # Извлекаем ключевые слова
