@@ -78,7 +78,7 @@ st.divider()
 st.markdown('# :blue_book:  Конспект на английском языке')
 
 col1, col2 = st.columns(2)
-text_from_tarea = col1.text_area('Введите тект статьи на английском языке', height=500)
+text_from_tarea = col1.text_area('Введите тект статьи на английском языке', key='t_area', height=500)
 
 button_start = st.button('Обработать текст')
 key_words_list = []
