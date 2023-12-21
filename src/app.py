@@ -3,7 +3,6 @@ import time
 import re
 
 import streamlit as st
-import pandas as pd
 import requests
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
@@ -15,50 +14,36 @@ API_URL_KEY = "https://api-inference.huggingface.co/models/ml6team/keyphrase-ext
 API_URL_SUM = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
 
 TOKEN = os.getenv('API_TOKEN')
-headers = {"Authorization": TOKEN}
-if TOKEN:
-    print('found token')
-else:
-    print('no token :(')
+HEADERS = {"Authorization": TOKEN}
+
+
+def hugging_api_request(url, payload):
+    response = requests.post(url, headers=HEADERS, json=payload, timeout=120)
+    body = response.json()
+    if 'error' in body:
+        print(response.status_code)
+        if 'estimated_time' in body:
+            time.sleep(body['estimated_time'])
+        else:
+            print(body)
+            return
+        hugging_api_request(url, payload)
+    return body
+
 
 # Функция для получения ключевых слов
 def get_key_words(payload):
-    response = requests.post(API_URL_KEY, headers=headers, json=payload)
-    body = response.json()
-    if 'error' in body:
-        if 'estimated_time' in body:
-            time.sleep(body['estimated_time'])
-        else:
-            print(body)
-            return
-        get_key_words(payload)
-    return body
+    return hugging_api_request(API_URL_KEY, payload)
+
 
 # Функция для перевода слова
 def translate_key_words(payload):
-    response = requests.post(API_URL_TRA, headers=headers, json=payload)
-    body = response.json()
-    if 'error' in body:
-        if 'estimated_time' in body:
-            time.sleep(body['estimated_time'])
-        else:
-            print(body)
-            return
-        translate_key_words(payload)
-    return body
+    return hugging_api_request(API_URL_TRA, payload)
+
 
 # Функция для составления конспекта
 def make_summary(payload):
-    response = requests.post(API_URL_SUM, headers=headers, json=payload)
-    body = response.json()
-    if 'error' in body:
-        if 'estimated_time' in body:
-            time.sleep(body['estimated_time'])
-        else:
-            print(body)
-            return
-        make_summary(payload)
-    return body
+    return hugging_api_request(API_URL_SUM, payload)
 
 
 # Очищаем список слов
@@ -86,12 +71,12 @@ text_from_tarea = col1.text_area('Введите тект статьи на ан
 button_start = st.button('Обработать текст')
 key_words_list = []
 
-
 if button_start:
     with st.spinner('Составляем конспект...'):
         # Составляем конспект
         summary_text = make_summary({"inputs": text_from_tarea})
-        col2.text_area('Конспект статьи', height=500, key='sum_area', value=summary_text[0]['summary_text'])
+        col2.text_area('Конспект статьи', height=500,
+                       key='sum_area', value=summary_text[0]['summary_text'])
 
     with st.spinner('Получаем ключевые слова...'):
         # Извлекаем ключевые слова
@@ -104,8 +89,10 @@ if button_start:
 
     with st.spinner('Переводим ключевые слова...'):
         # Переводим ключевые слова
-        translated_words_dict = translate_key_words({"inputs": sorted_keywords})
-        translated_words_list = [word['translation_text'] for word in translated_words_dict]
+        translated_words_dict = translate_key_words(
+            {"inputs": sorted_keywords})
+        translated_words_list = [
+            word['translation_text'] for word in translated_words_dict]
 
         # Создаем карточки
         cleaned_words_list_ru = clean_list(translated_words_list)
@@ -119,7 +106,8 @@ if button_start:
         # Выводим Word Cloud
         st.set_option('deprecation.showPyplotGlobalUse', False)
         words_str = ', '.join(sorted_keywords)
-        w = WordCloud(background_color="white", width=1600, height=800).generate(words_str)
+        w = WordCloud(background_color="white",
+                      width=1600, height=800).generate(words_str)
         plt.imshow(w, interpolation='bilinear')
         plt.imshow(w)
         plt.axis("off")
