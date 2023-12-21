@@ -21,11 +21,10 @@ def hugging_api_request(url, payload):
     response = requests.post(url, headers=HEADERS, json=payload, timeout=120)
     body = response.json()
     if 'error' in body:
-        print(response.status_code)
+        print(response.status_code, body)
         if 'estimated_time' in body:
             time.sleep(body['estimated_time'])
         else:
-            print(body)
             return
         hugging_api_request(url, payload)
     return body
