@@ -8,13 +8,13 @@ import time
 st.set_page_config(page_title="Student Assistant")
 
 # API для генерации изображения
-API_URL_img = "https://api-inference.huggingface.co/models/playgroundai/playground-v2-1024px-aesthetic"
-headers = {"Authorization": os.getenv("api_token")}
+API_URL_IMG = "https://api-inference.huggingface.co/models/playgroundai/playground-v2-1024px-aesthetic"
+headers = {"Authorization": os.getenv('API_TOKEN')}
 
 # Функция генерации изображения
 def generate_img(payload):
     try:
-        response = requests.post(API_URL_img, headers=headers, json=payload)
+        response = requests.post(API_URL_IMG, headers=headers, json=payload)
     except json.JSONDecodeError as e:
         print("Ошибка декодирования JSON:", e)
         time.sleep(3)

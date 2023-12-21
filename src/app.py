@@ -16,7 +16,10 @@ API_URL_SUM = "https://api-inference.huggingface.co/models/facebook/bart-large-c
 
 TOKEN = os.getenv('API_TOKEN')
 headers = {"Authorization": TOKEN}
-
+if TOKEN:
+    print('found token')
+else:
+    print('no token :(')
 
 # Функция для получения ключевых слов
 def get_key_words(payload):
