@@ -3,6 +3,7 @@ import requests
 import io
 from PIL import Image
 import os
+import time
 
 st.set_page_config(page_title="Student Assistant")
 
