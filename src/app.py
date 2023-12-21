@@ -26,6 +26,8 @@ def hugging_api_request(url, payload):
     if 'error' in body:
         print(response.status_code, body)
         if 'estimated_time' in body:
+            st.info('Модель загружается. Она будет доступна '
+                    f'через {body["estimated_time"]} сек.')
             time.sleep(body['estimated_time'])
         else:
             return
