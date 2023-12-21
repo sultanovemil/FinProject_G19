@@ -24,14 +24,14 @@ def hugging_api_request(url, payload):
     response = requests.post(url, headers=HEADERS, json=payload, timeout=120)
     body = response.json()
     if 'error' in body:
-        print(response.status_code, body)
+        print(response.status_code, body['error'])
         if 'estimated_time' in body:
             st.info('Модель загружается. Она будет доступна '
                     f'через {body["estimated_time"]} сек.')
             time.sleep(body['estimated_time'])
+            hugging_api_request(url, payload)
         else:
             return
-        hugging_api_request(url, payload)
     return body
 
 
