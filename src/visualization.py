@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 import io
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import os
 import time
 
