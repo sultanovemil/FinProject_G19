@@ -3,7 +3,6 @@ import json
 import os
 import time
 
-from PIL import Image
 import requests
 import streamlit as st
 
@@ -47,11 +46,11 @@ def hugging_api_request(url, payload):
         print(response.status_code, body)
         if 'estimated_time' in body:
             st.info('Модель загружается. Она будет доступна '
-                     f'через {body["estimated_time"]} сек.')
-            time.sleep(body['estimated_time'])
+                    f'через {body["estimated_time"] + 1} сек.')
+            time.sleep(min(body['estimated_time'] + 1, 60))
+            hugging_api_request(url, payload)
         else:
             return
-        hugging_api_request(url, payload)
     return body
 
 

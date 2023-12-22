@@ -28,7 +28,7 @@ def hugging_api_request(url, payload):
         if 'estimated_time' in body:
             st.info('Модель загружается. Она будет доступна '
                     f'через {body["estimated_time"] + 1} сек.')
-            time.sleep(body['estimated_time'] + 1)
+            time.sleep(min(body['estimated_time'] + 1, 60))
             hugging_api_request(url, payload)
         else:
             return
